@@ -1,7 +1,10 @@
 from collections import defaultdict
 from typing import Any, List
 
-from mlagents_envs.environment import ActionTuple, UnityEnvironment
+from mlagents_envs.environment import UnityEnvironment
+from mlagents_envs.base_env import ActionTuple
+# from mlagents_envs import ActionTuple
+
 import numpy as np
 import torch
 from tqdm import tqdm

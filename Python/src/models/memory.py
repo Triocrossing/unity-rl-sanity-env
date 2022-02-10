@@ -71,7 +71,7 @@ class RLDataset(IterableDataset):
         self.buffer = buffer
         self.sample_size = sample_size
 
-    def __iter__(self) -> Tuple:
+    def __iter__(self):
         states, actions, rewards, dones, new_states = self.buffer.sample(
             self.sample_size
         )

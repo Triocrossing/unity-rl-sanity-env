@@ -1,12 +1,15 @@
 from typing import Tuple
 
 import numpy as np
-from mlagents_envs.environment import ActionTuple, UnityEnvironment
+from mlagents_envs.environment import UnityEnvironment
+# from mlagents_envs import ActionTuple
+from mlagents_envs.base_env import ActionTuple
+
 import torch
 from torch import nn
+from src.models.modules.modelUtils import versionControl
 
 from src.models.memory import Experience, ReplayBuffer
-
 
 class Agent:
     """Base Agent class handeling the interaction with the environment.
@@ -36,7 +39,6 @@ class Agent:
     def get_obs(self) -> Tuple[np.array, float, bool]:
         """Get observations, reward and done."""
         decision_steps, terminal_steps = self.env.get_steps(self.behavior_name)
-
         if len(terminal_steps) > 0:
             new_state = terminal_steps[0].obs[0]
             reward = terminal_steps[0].reward
@@ -46,6 +48,7 @@ class Agent:
             reward = decision_steps[0].reward
             done = False
 
+        # print("step: ", new_state)
         return new_state, reward, done
 
     def get_action(self, net: nn.Module, epsilon: float, device: str) -> int:
@@ -67,7 +70,8 @@ class Agent:
             if device not in ["cpu"]:
                 state = state.cuda(device)
 
-            q_values = net(state[:, :3], state[:, 3:])
+            obs, cam = versionControl.current_interpreter(state)
+            q_values = net(obs, cam)
             _, action = torch.max(q_values, dim=1)
             action = int(action.item())
 
@@ -86,7 +90,7 @@ class Agent:
         net: nn.Module,
         epsilon: float,
         device: str,
-    ) -> Tuple[float, bool]:
+    ) -> Tuple[float, bool, np.array]:
         """
         Carries out a single interaction step between the agent and the
         environment.
@@ -107,4 +111,4 @@ class Agent:
         if done:
             self.reset()
 
-        return reward, done
+        return reward, done, new_state

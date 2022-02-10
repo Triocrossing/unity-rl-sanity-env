@@ -1,8 +1,8 @@
 defaults:
   - _self_
   - model: dqn.yaml
-  - env: sanity_env_2d
-  - compnode: cpu_128
+  - env: sanity_env_2d_sdf # - env: sanity_env_2d_occupancyGrid
+  - compnode: cuda_128
 
 # Type of run to launch (current: train, TODO: debug/eval/infer/...)
 # run_type: infer
@@ -17,9 +17,9 @@ log_dir: ${root}/Logs
 test_dir: ${root}/tests
 
 # Name of the project is accessed by loggers
-project_name: useless
+project_name: OccupancyGrid
 # Name of the run is accessed by loggers
-xp_name: sanityCheck_currentModel
+xp_name: sdf_epi200_cuda_2080Ti
 # Wether to synced the logs or not (WandB)
 log_offline: false
 
@@ -29,3 +29,6 @@ seed: 1
 print_config: True
 # Disable (or not) python warnings
 ignore_warnings: True
+
+versionCam: Position
+versionObs: OccupancyGrid

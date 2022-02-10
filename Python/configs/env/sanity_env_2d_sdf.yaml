@@ -1,0 +1,4 @@
+path: ${root}/buildLin/saintyEnv_OccupancyGrid/Jan7/OccupancyGrid_Jan7.x86_64
+
+display: true
+num_actions: 2
